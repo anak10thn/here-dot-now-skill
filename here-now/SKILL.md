@@ -14,6 +14,10 @@ Publish any file or folder to the web and get a live URL back. Static hosting on
 
 To install or update: `curl -fsSL https://here.now/install.sh | bash`
 
+Skills CLI (global install): `npx skills add heredotnow/skill --skill here-now -g`
+
+For repo-pinned/project-local installs, run the same command without `-g`.
+
 ## Publish
 
 ```bash
