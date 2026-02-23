@@ -8,11 +8,11 @@ description: >
 
 # here.now
 
-**Skill version: 1.4**
+**Skill version: 1.6**
 
 Publish any file or folder to the web and get a live URL back. Static hosting only.
 
-To check for skill updates: `npx skills add heredotnow/skill --skill here-now`
+To install or update: `curl -fsSL https://here.now/install.sh | bash`
 
 ## Publish
 
