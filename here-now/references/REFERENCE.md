@@ -299,7 +299,8 @@ Asset paths work naturally from the subdomain root:
 
 1. If `index.html` exists at root → serve it as the document.
 2. Else if exactly one file at root → serve an auto-viewer page (images, PDF, video, audio get rich viewers; everything else gets a download page).
-3. Else → 404.
+3. Else if an `index.html` exists in any subdirectory → serve the first one found.
+4. Else → 404.
 
 Direct file paths always work: `https://<slug>.here.now/report.pdf`
 
@@ -309,5 +310,5 @@ Direct file paths always work: `https://<slug>.here.now/report.pdf`
 | -------------- | ------------------ | ---------------------------- |
 | Max file size  | 250 MB             | 5 GB                         |
 | Expiry         | 24 hours           | Permanent (or custom TTL)    |
-| Rate limit     | 5 / hour / IP      | Unlimited                    |
+| Rate limit     | 5 / hour / IP      | 60 / hour / account          |
 | Account needed | No                 | Yes (get key at here.now)    |
