@@ -58,7 +58,7 @@ Creates a new publish with a random slug. Works with or without authentication.
 }
 ```
 
-- `files` (required): array of `{ path, size, contentType }`. At least one file.
+- `files` (required): array of `{ path, size, contentType }`. At least one file. Paths should be relative to the site root (e.g. `index.html`, `assets/style.css`) — don't include a parent directory name like `my-project/index.html`.
 - `ttlSeconds` (optional): expiry in seconds. Ignored for anonymous publishes (always 24h).
 - `viewer` (optional): metadata for auto-viewer pages (only used when no `index.html`).
 
