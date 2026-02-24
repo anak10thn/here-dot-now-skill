@@ -4,6 +4,12 @@ description: >
   Publish files and folders to the web instantly. Use when asked to "publish this",
   "host this", "deploy this", "share this on the web", "make a website", or
   "put this online". Outputs a live URL at <slug>.here.now.
+compatibility:
+  agents:
+    - claude-code
+  os:
+    - macos
+    - linux
 ---
 
 # here.now
@@ -12,11 +18,17 @@ description: >
 
 Publish any file or folder to the web and get a live URL back. Static hosting only.
 
-To install or update: `curl -fsSL https://here.now/install.sh | bash`
-
-Skills CLI (global install): `npx skills add heredotnow/skill --skill here-now -g`
+To install or update (recommended): `npx skills add heredotnow/skill --skill here-now -g`
 
 For repo-pinned/project-local installs, run the same command without `-g`.
+
+If npm is unavailable, see fallback install docs: https://here.now/docs#install-skill
+
+## Requirements
+
+- Required binaries: `curl`, `file`, `jq`
+- Optional environment variable: `$HERENOW_API_KEY`
+- Optional credentials file: `~/.herenow/credentials`
 
 ## Publish
 
@@ -58,6 +70,8 @@ mkdir -p ~/.herenow && echo "<API_KEY>" > ~/.herenow/credentials && chmod 600 ~/
 ```
 
 **IMPORTANT**: Never pass the API key directly in shell commands. Always write it to `~/.herenow/credentials` using the command above. This keeps the key out of terminal history and logs.
+
+Never commit credentials or local state files (`~/.herenow/credentials`, `.herenow/state.json`) to source control.
 
 ## State file
 
@@ -123,6 +137,7 @@ mkdir -p ~/.herenow && echo "<API_KEY>" > ~/.herenow/credentials && chmod 600 ~/
 | `--description <text>` | Viewer description                            |
 | `--ttl <seconds>`      | Set expiry (authenticated only)               |
 | `--base-url <url>`     | API base URL (default: `https://here.now`)    |
+| `--allow-nonherenow-base-url` | Allow sending auth to non-default `--base-url` |
 | `--api-key <key>`      | API key override (prefer credentials file)    |
 
 ## Beyond the script
