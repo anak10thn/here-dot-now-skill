@@ -8,7 +8,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.6**
+**Skill version: 1.6.1**
 
 Publish any file or folder to the web and get a live URL back. Static hosting only.
 
