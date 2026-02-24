@@ -29,7 +29,9 @@ Outputs the live URL (e.g. `https://bright-canvas-a7k2.here.now/`).
 Without an API key this creates an **anonymous publish** that expires in 24 hours.
 With a saved API key, the publish is permanent.
 
-**File structure:** Place `index.html` at the root of the directory you publish, not inside a subdirectory. The directory's contents become the site root. For example, publish `my-site/` where `my-site/index.html` exists — don't publish a parent folder that contains `my-site/`.
+**File structure:** For HTML sites, place `index.html` at the root of the directory you publish, not inside a subdirectory. The directory's contents become the site root. For example, publish `my-site/` where `my-site/index.html` exists — don't publish a parent folder that contains `my-site/`.
+
+You can also publish raw files without any HTML. Single files get a rich auto-viewer (images, PDF, video, audio). Multiple files get an auto-generated directory listing with folder navigation and an image gallery.
 
 ## Update an existing publish
 
