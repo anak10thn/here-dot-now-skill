@@ -32,6 +32,8 @@ If npm is unavailable, see fallback install docs: https://here.now/docs#install-
 
 Outputs the live URL (e.g. `https://bright-canvas-a7k2.here.now/`).
 
+Under the hood this is a three-step flow: create/update -> upload files -> finalize. A publish is not live until finalize succeeds.
+
 Without an API key this creates an **anonymous publish** that expires in 24 hours.
 With a saved API key, the publish is permanent.
 
