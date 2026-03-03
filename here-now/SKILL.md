@@ -51,6 +51,17 @@ The script auto-loads the `claimToken` from `.herenow/state.json` when updating 
 
 Authenticated updates require a saved API key.
 
+## Client attribution
+
+Pass `--client` so here.now can track reliability by agent:
+
+```bash
+./scripts/publish.sh {file-or-dir} --client cursor
+```
+
+This sends `X-HereNow-Client: cursor/publish-sh` on publish API calls.
+If omitted, the script sends a fallback value.
+
 ## API key storage
 
 The publish script reads the API key from these sources (first match wins):
@@ -137,6 +148,7 @@ mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/
 | `--title {text}`       | Viewer title (non-site publishes)             |
 | `--description {text}` | Viewer description                            |
 | `--ttl {seconds}`      | Set expiry (authenticated only)               |
+| `--client {name}`      | Agent name for attribution (e.g. `cursor`)    |
 | `--base-url {url}`     | API base URL (default: `https://here.now`)    |
 | `--allow-nonherenow-base-url` | Allow sending auth to non-default `--base-url` |
 | `--api-key {key}`      | API key override (prefer credentials file)    |

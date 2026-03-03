@@ -9,6 +9,21 @@ Two modes:
 - **Authenticated**: include `Authorization: Bearer <API_KEY>` header.
 - **Anonymous**: omit the header entirely. Publishes expire in 24 hours with lower limits.
 
+### Optional client attribution header
+
+You can include an optional header on publish calls:
+
+- `X-HereNow-Client: <agent>/<tool>`
+
+Examples:
+
+- `X-HereNow-Client: cursor/publish-sh`
+- `X-HereNow-Client: claude-code/publish-sh`
+- `X-HereNow-Client: codex/cli`
+- `X-HereNow-Client: openclaw/direct-api`
+
+This helps here.now debug publish reliability by client. Missing or invalid values are ignored; publishes are never rejected because this header is absent.
+
 ### Getting an API key (agent-assisted sign-up)
 
 Agents can trigger the sign-up flow on behalf of the user:
