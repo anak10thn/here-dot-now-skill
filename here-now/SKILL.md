@@ -124,16 +124,24 @@ Never present this local file path as a URL, and never use it as source of truth
 To upgrade from anonymous (24h) to permanent publishing:
 
 1. Ask the user for their email address.
-2. Call the sign-up endpoint to send them a magic link:
+2. Request a one-time sign-in code:
 
 ```bash
-curl -sS https://here.now/api/auth/login \
+curl -sS https://here.now/api/auth/agent/request-code \
   -H "content-type: application/json" \
   -d '{"email": "user@example.com"}'
 ```
 
-3. Tell the user: "Check your inbox for a sign-in link from here.now. Click it, then click Open Dashboard to complete sign-in, then copy your API key from the dashboard."
-4. Once the user provides the key, save it:
+3. Tell the user: "Check your inbox for a sign-in code from here.now and paste it here."
+4. Verify the code and get the API key:
+
+```bash
+curl -sS https://here.now/api/auth/agent/verify-code \
+  -H "content-type: application/json" \
+  -d '{"email":"user@example.com","code":"ABCD-2345"}'
+```
+
+5. Save the returned `apiKey`:
 
 ```bash
 mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/.herenow/credentials

@@ -26,27 +26,46 @@ This helps here.now debug publish reliability by client. Missing or invalid valu
 
 ### Getting an API key (agent-assisted sign-up)
 
-Agents can trigger the sign-up flow on behalf of the user:
+Agents can complete sign-up without requiring the user to open the dashboard:
 
-**1. Send magic link:**
+**1. Request a one-time code by email:**
 
 ```bash
-curl -sS https://here.now/api/auth/login \
+curl -sS https://here.now/api/auth/agent/request-code \
   -H "content-type: application/json" \
   -d '{"email": "user@example.com"}'
 ```
 
-Response: `{"success": true}`
+Response:
 
-No account needed beforehand. If the email is new, an account is created automatically when the user clicks the link.
+```json
+{ "success": true, "requiresCodeEntry": true, "expiresAt": "2026-03-01T12:34:56.000Z" }
+```
 
-**2. User clicks the link in their email.** They land on a here.now confirmation page and click **Open Dashboard** to complete sign-in.
+**2. User copies the code from email** and pastes it into the agent.
 
-**3. User copies their API key** from the dashboard (API key tab) and provides it to the agent.
+**3. Verify code and receive API key:**
 
-The agent cannot retrieve the API key programmatically (it requires a browser session). The user must copy it manually.
+```bash
+curl -sS https://here.now/api/auth/agent/verify-code \
+  -H "content-type: application/json" \
+  -d '{"email":"user@example.com","code":"ABCD-2345"}'
+```
 
-The login endpoint also accepts an optional `returnTo` field (a path like `"/"`), which controls where the user lands after completing the confirmation step.
+Response:
+
+```json
+{
+  "success": true,
+  "email": "user@example.com",
+  "apiKey": "<API_KEY>",
+  "isNewUser": true
+}
+```
+
+If the code is invalid or expired, verify returns `400`.
+
+The browser sign-in flow (`POST /api/auth/login`) remains available for normal web sessions.
 
 ## Endpoints
 
