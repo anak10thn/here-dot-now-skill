@@ -40,13 +40,13 @@ Response: `{"success": true}`
 
 No account needed beforehand. If the email is new, an account is created automatically when the user clicks the link.
 
-**2. User clicks the link in their email.** They land on the here.now dashboard, signed in.
+**2. User clicks the link in their email.** They land on a here.now confirmation page and click **Open Dashboard** to complete sign-in.
 
 **3. User copies their API key** from the dashboard (API key tab) and provides it to the agent.
 
 The agent cannot retrieve the API key programmatically (it requires a browser session). The user must copy it manually.
 
-The login endpoint also accepts an optional `returnTo` field (a path like `"/"`), which controls where the user lands after clicking the magic link.
+The login endpoint also accepts an optional `returnTo` field (a path like `"/"`), which controls where the user lands after completing the confirmation step.
 
 ## Endpoints
 

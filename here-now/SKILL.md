@@ -8,7 +8,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.6.3**
+**Skill version: 1.6.4**
 
 Publish any file or folder to the web and get a live URL back. Static hosting only.
 
@@ -132,7 +132,7 @@ curl -sS https://here.now/api/auth/login \
   -d '{"email": "user@example.com"}'
 ```
 
-3. Tell the user: "Check your inbox for a sign-in link from here.now. Click it, then copy your API key from the dashboard."
+3. Tell the user: "Check your inbox for a sign-in link from here.now. Click it, then click Open Dashboard to complete sign-in, then copy your API key from the dashboard."
 4. Once the user provides the key, save it:
 
 ```bash
