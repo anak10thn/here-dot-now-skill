@@ -7,11 +7,11 @@ Base URL: `https://here.now`
 Two modes:
 
 - **Authenticated**: include `Authorization: Bearer <API_KEY>` header.
-- **Anonymous**: omit the header entirely. Publishes expire in 24 hours with lower limits.
+- **Anonymous**: omit the header entirely. Artifacts expire in 24 hours with lower limits.
 
 ### Optional client attribution header
 
-You can include an optional header on publish calls:
+You can include an optional header on artifact API calls:
 
 - `X-HereNow-Client: <agent>/<tool>`
 
@@ -121,7 +121,7 @@ Creates a new artifact with a random slug. Works with or without authentication.
 }
 ```
 
-- `files` (required): array of `{ path, size, contentType }`. At least one file. Paths should be relative to the site root (e.g. `index.html`, `assets/style.css`) — don't include a parent directory name like `my-project/index.html`.
+- `files` (required): array of `{ path, size, contentType }`. At least one file. Paths should be relative to the artifact root (e.g. `index.html`, `assets/style.css`) — don't include a parent directory name like `my-project/index.html`.
 - `ttlSeconds` (optional): expiry in seconds. Ignored for anonymous artifacts (always 24h).
 - `viewer` (optional): metadata for auto-viewer pages (only used when no `index.html`).
 
