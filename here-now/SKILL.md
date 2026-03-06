@@ -175,4 +175,11 @@ The API is transitioning to:
 
 Both old and new route families are supported during the transition. Existing integrations using `/api/v1/publish*`, `/api/v1/username`, or `/api/v1/mounts` continue to work.
 
+## Handle and links quick reference
+
+- Handle endpoints: `/api/v1/handle` (aliases: `/api/v1/username`)
+- Link endpoints: `/api/v1/links` and `/api/v1/links/:location` (aliases: `/api/v1/mounts*`)
+- Root location sentinel for path params remains `__root__`
+- Handle/link changes can take up to 60 seconds to propagate globally (Cloudflare KV)
+
 Full docs: https://here.now/docs
