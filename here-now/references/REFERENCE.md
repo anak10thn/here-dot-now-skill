@@ -390,6 +390,8 @@ Registers your handle for `handle.here.now`.
 
 Handle rules: 2-30 chars, lowercase letters/numbers/hyphens, no leading/trailing hyphen, reserved names blocked.
 
+Free plan users receive a `403` response. To upgrade, sign in at https://here.now and go to the Plan tab in the dashboard.
+
 ---
 
 ### Get current handle

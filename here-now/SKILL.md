@@ -178,7 +178,7 @@ Both old and new route families are supported during the transition. Existing in
 ## Handle and links quick reference
 
 - Handles are user-owned subdomain namespaces on `here.now` (for example, `yourname.here.now`) that route paths to your artifacts.
-- Claiming and using handles requires a paid plan (`hobby`).
+- Claiming and using handles requires a paid plan (`hobby`). To upgrade, sign in at https://here.now and go to the Plan tab in the dashboard.
 - Handle endpoints: `/api/v1/handle`
 - Link endpoints: `/api/v1/links` and `/api/v1/links/:location`
 - Root location sentinel for path params remains `__root__`
