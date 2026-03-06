@@ -94,8 +94,7 @@ Preferred aliases:
 - `DELETE /api/v1/artifact/:slug` (alias of `DELETE /api/v1/publish/:slug`)
 - `POST /api/v1/artifact/:slug/uploads/refresh` (alias of `POST /api/v1/publish/:slug/uploads/refresh`)
 - `POST /api/v1/handle` / `GET /api/v1/handle` / `PATCH /api/v1/handle` / `DELETE /api/v1/handle`
-- `POST /api/v1/links` / `GET /api/v1/links`
-- `GET|PATCH|DELETE /api/v1/links/:location` (`__root__` sentinel is unchanged)
+- `POST /api/v1/links` / `GET /api/v1/links` / `GET|PATCH|DELETE /api/v1/links/:location`
 
 ---
 
@@ -367,7 +366,7 @@ Use when presigned URLs expire mid-upload (they're valid for 1 hour).
 
 ### Register a handle
 
-`POST /api/v1/handle` (alias: `POST /api/v1/username`)
+`POST /api/v1/handle`
 
 Registers your handle for `handle.here.now`.
 
@@ -395,7 +394,7 @@ Handle rules: 2-30 chars, lowercase letters/numbers/hyphens, no leading/trailing
 
 ### Get current handle
 
-`GET /api/v1/handle` (alias: `GET /api/v1/username`)
+`GET /api/v1/handle`
 
 Returns your current handle and links.
 
@@ -405,7 +404,7 @@ Returns your current handle and links.
 
 ### Change handle
 
-`PATCH /api/v1/handle` (alias: `PATCH /api/v1/username`)
+`PATCH /api/v1/handle`
 
 Changes an existing handle to a new one.
 
@@ -421,7 +420,7 @@ Changes an existing handle to a new one.
 
 ### Delete handle
 
-`DELETE /api/v1/handle` (alias: `DELETE /api/v1/username`)
+`DELETE /api/v1/handle`
 
 Deletes your handle and all links under it.
 
@@ -431,7 +430,7 @@ Deletes your handle and all links under it.
 
 ### Create a link under your handle
 
-`POST /api/v1/links` (alias: `POST /api/v1/mounts`)
+`POST /api/v1/links`
 
 Links an artifact slug to a location under your handle.
 
@@ -452,7 +451,7 @@ Use an empty `location` to link at root (`https://yourname.here.now/`).
 
 ### List links under your handle
 
-`GET /api/v1/links` (alias: `GET /api/v1/mounts`)
+`GET /api/v1/links`
 
 Lists all links for your current handle.
 
@@ -462,7 +461,7 @@ Lists all links for your current handle.
 
 ### Get one link
 
-`GET /api/v1/links/:location` (alias: `GET /api/v1/mounts/:mount_path`)
+`GET /api/v1/links/:location`
 
 Gets a single link by location. Use `__root__` for the root location.
 
@@ -472,7 +471,7 @@ Gets a single link by location. Use `__root__` for the root location.
 
 ### Update one link
 
-`PATCH /api/v1/links/:location` (alias: `PATCH /api/v1/mounts/:mount_path`)
+`PATCH /api/v1/links/:location`
 
 Changes which artifact slug a location points to.
 
@@ -488,7 +487,7 @@ Changes which artifact slug a location points to.
 
 ### Delete one link
 
-`DELETE /api/v1/links/:location` (alias: `DELETE /api/v1/mounts/:mount_path`)
+`DELETE /api/v1/links/:location`
 
 Removes a link by location. Use `__root__` for the root location.
 
