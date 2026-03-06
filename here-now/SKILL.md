@@ -1,9 +1,11 @@
 ---
 name: here-now
 description: >
-  Share files and folders to the web instantly. Use when asked to "publish this",
-  "host this", "deploy this", "share this on the web", "make a website", or
-  "put this online". Outputs a live URL at {slug}.here.now.
+  Publish files and folders to the web instantly. Static hosting for HTML sites,
+  images, PDFs, and any file type. Use when asked to "publish this", "host this",
+  "deploy this", "share this on the web", "make a website", "put this online",
+  "upload to the web", "create a webpage", "share a link", "serve this site",
+  or "generate a URL". Outputs a live, shareable URL at {slug}.here.now.
 ---
 
 # here.now
@@ -178,7 +180,7 @@ Both old and new route families are supported during the transition. Existing in
 ## Handle and links quick reference
 
 - Handles are user-owned subdomain namespaces on `here.now` (for example, `yourname.here.now`) that route paths to your artifacts.
-- Claiming and using handles requires a paid plan (`hobby`). To upgrade, sign in at https://here.now and go to the Plan tab in the dashboard.
+- Any account with an API key can claim a handle.
 - Handle endpoints: `/api/v1/handle`
 - Link endpoints: `/api/v1/links` and `/api/v1/links/:location`
 - Root location sentinel for path params remains `__root__`
