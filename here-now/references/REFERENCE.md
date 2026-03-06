@@ -69,11 +69,41 @@ The browser sign-in flow (`POST /api/auth/login`) remains available for normal w
 
 ## Endpoints
 
-### Create a new publish
+### Naming transition (backward compatibility)
 
-`POST /api/v1/publish`
+The API is moving to new terminology:
 
-Creates a new publish with a random slug. Works with or without authentication.
+- `publish` -> `artifact`
+- `username` -> `handle`
+- `mount` -> `link`
+
+Backward compatibility is preserved:
+
+- Existing routes continue to work (`/api/v1/publish`, `/api/v1/publishes`, `/api/v1/username`, `/api/v1/mounts`, etc.).
+- New alias routes are available (`/api/v1/artifact`, `/api/v1/artifacts`, `/api/v1/handle`, `/api/v1/links`).
+- New routes accept old and new request field names where applicable.
+
+Preferred aliases:
+
+- `POST /api/v1/artifact` (alias of `POST /api/v1/publish`)
+- `GET /api/v1/artifacts` (alias of `GET /api/v1/publishes`)
+- `PUT /api/v1/artifact/:slug` (alias of `PUT /api/v1/publish/:slug`)
+- `POST /api/v1/artifact/:slug/finalize` (alias of `POST /api/v1/publish/:slug/finalize`)
+- `POST /api/v1/artifact/:slug/claim` (alias of `POST /api/v1/publish/:slug/claim`)
+- `PATCH /api/v1/artifact/:slug/metadata` (alias of `PATCH /api/v1/publish/:slug/metadata`)
+- `DELETE /api/v1/artifact/:slug` (alias of `DELETE /api/v1/publish/:slug`)
+- `POST /api/v1/artifact/:slug/uploads/refresh` (alias of `POST /api/v1/publish/:slug/uploads/refresh`)
+- `POST /api/v1/handle` / `GET /api/v1/handle` / `PATCH /api/v1/handle` / `DELETE /api/v1/handle`
+- `POST /api/v1/links` / `GET /api/v1/links`
+- `GET|PATCH|DELETE /api/v1/links/:location` (`__root__` sentinel is unchanged)
+
+---
+
+### Create a new artifact
+
+`POST /api/v1/artifact` (alias: `POST /api/v1/publish`)
+
+Creates a new artifact with a random slug. Works with or without authentication.
 
 **Request body:**
 
@@ -93,7 +123,7 @@ Creates a new publish with a random slug. Works with or without authentication.
 ```
 
 - `files` (required): array of `{ path, size, contentType }`. At least one file. Paths should be relative to the site root (e.g. `index.html`, `assets/style.css`) — don't include a parent directory name like `my-project/index.html`.
-- `ttlSeconds` (optional): expiry in seconds. Ignored for anonymous publishes (always 24h).
+- `ttlSeconds` (optional): expiry in seconds. Ignored for anonymous artifacts (always 24h).
 - `viewer` (optional): metadata for auto-viewer pages (only used when no `index.html`).
 
 **Response (authenticated):**
@@ -105,7 +135,7 @@ Creates a new publish with a random slug. Works with or without authentication.
   "status": "pending",
   "isLive": false,
   "requiresFinalize": true,
-  "note": "Publish created, but this slug is not live yet. Upload all files to upload.uploads[], then POST upload.finalizeUrl with {\"versionId\":\"...\"}.",
+  "note": "Artifact created, but this slug is not live yet. Upload all files to upload.uploads[], then POST upload.finalizeUrl with {\"versionId\":\"...\"}.",
   "upload": {
     "versionId": "01J...",
     "uploads": [
@@ -116,13 +146,13 @@ Creates a new publish with a random slug. Works with or without authentication.
         "headers": { "Content-Type": "text/html; charset=utf-8" }
       }
     ],
-    "finalizeUrl": "https://here.now/api/v1/publish/bright-canvas-a7k2/finalize",
+    "finalizeUrl": "https://here.now/api/v1/artifact/bright-canvas-a7k2/finalize",
     "expiresInSeconds": 3600
   }
 }
 ```
 
-**This step only creates a pending publish. It is not complete yet.**
+**This step only creates a pending artifact. It is not complete yet.**
 
 - You **must upload every file** in `upload.uploads[]`.
 - Then you **must finalize** with `POST upload.finalizeUrl` and body `{ "versionId": "..." }`.
@@ -137,13 +167,13 @@ Creates a new publish with a random slug. Works with or without authentication.
   "claimUrl": "https://here.now/claim?slug=bright-canvas-a7k2&token=abc123...",
   "expiresAt": "2026-02-19T01:00:00.000Z",
   "anonymous": true,
-  "warning": "IMPORTANT: Save the claimToken and claimUrl. They are returned only once and cannot be recovered. Share the claimUrl with the user so they can keep the site permanently."
+  "warning": "IMPORTANT: Save the claimToken and claimUrl. They are returned only once and cannot be recovered. Share the claimUrl with the user so they can keep the artifact permanently."
 }
 ```
 
-**IMPORTANT: The `claimToken` and `claimUrl` are returned only once and cannot be recovered. Always save the `claimToken` and share the `claimUrl` with the user so they can claim the site and keep it permanently. If you lose the claim token, the site will expire in 24 hours with no way to save it.**
+**IMPORTANT: The `claimToken` and `claimUrl` are returned only once and cannot be recovered. Always save the `claimToken` and share the `claimUrl` with the user so they can claim the artifact and keep it permanently. If you lose the claim token, the artifact will expire in 24 hours with no way to save it.**
 
-`claimToken`, `claimUrl`, and `expiresAt` are only present for anonymous publishes. Authenticated publishes do not include these fields.
+`claimToken`, `claimUrl`, and `expiresAt` are only present for anonymous artifacts. Authenticated artifacts do not include these fields.
 
 ---
 
@@ -161,11 +191,11 @@ Uploads can run in parallel. Presigned URLs are valid for 1 hour.
 
 ---
 
-### Finalize a publish
+### Finalize an artifact
 
-`POST /api/v1/publish/:slug/finalize`
+`POST /api/v1/artifact/:slug/finalize` (alias: `POST /api/v1/publish/:slug/finalize`)
 
-Makes the publish live by flipping the slug pointer to the new version.
+Makes the artifact live by flipping the slug pointer to the new version.
 
 **Request body:**
 
@@ -174,8 +204,8 @@ Makes the publish live by flipping the slug pointer to the new version.
 ```
 
 **Auth:**
-- Owned publishes: requires `Authorization: Bearer <API_KEY>`.
-- Anonymous publishes: no auth required for finalize.
+- Owned artifacts: requires `Authorization: Bearer <API_KEY>`.
+- Anonymous artifacts: no auth required for finalize.
 
 **Response:**
 
@@ -191,16 +221,16 @@ Makes the publish live by flipping the slug pointer to the new version.
 
 ---
 
-### Update an existing publish
+### Update an existing artifact
 
-`PUT /api/v1/publish/:slug`
+`PUT /api/v1/artifact/:slug` (alias: `PUT /api/v1/publish/:slug`)
 
 Same request body as create. Returns new presigned upload URLs and a new `finalizeUrl`.
 The update response also includes `status: "pending"` and `isLive: false` to indicate the new version is not live until finalize.
 
-**Auth for owned publishes:** requires `Authorization: Bearer <API_KEY>` matching the owner.
+**Auth for owned artifacts:** requires `Authorization: Bearer <API_KEY>` matching the owner.
 
-**Auth for anonymous publishes:** include `claimToken` in the request body:
+**Auth for anonymous artifacts:** include `claimToken` in the request body:
 
 ```json
 {
@@ -213,9 +243,9 @@ Anonymous updates do not extend the original expiration timer. Returns `410 Gone
 
 ---
 
-### Claim an anonymous publish
+### Claim an anonymous artifact
 
-`POST /api/v1/publish/:slug/claim`
+`POST /api/v1/artifact/:slug/claim` (alias: `POST /api/v1/publish/:slug/claim`)
 
 Transfers ownership to an authenticated user and removes the expiration.
 
@@ -244,7 +274,7 @@ Users can also claim by visiting the `claimUrl` in a browser and signing in.
 
 ### Patch viewer metadata
 
-`PATCH /api/v1/publish/:slug/metadata`
+`PATCH /api/v1/artifact/:slug/metadata` (alias: `PATCH /api/v1/publish/:slug/metadata`)
 
 Update title, description, og:image, or TTL without re-uploading files.
 
@@ -263,7 +293,7 @@ Update title, description, og:image, or TTL without re-uploading files.
 }
 ```
 
-All fields optional. `ogImagePath` must reference an image file within the current publish.
+All fields optional. `ogImagePath` must reference an image file within the current artifact.
 
 **Response:**
 
@@ -271,19 +301,19 @@ All fields optional. `ogImagePath` must reference an image file within the curre
 {
   "success": true,
   "effectiveForRootDocument": true,
-  "note": "Viewer metadata applies because this publish has no index.html."
+  "note": "Viewer metadata applies because this artifact has no index.html."
 }
 ```
 
-If the publish has an `index.html`, viewer metadata is stored but the site's own HTML controls what browsers see.
+If the artifact has an `index.html`, viewer metadata is stored but the site's own HTML controls what browsers see.
 
 ---
 
-### Delete a publish
+### Delete an artifact
 
-`DELETE /api/v1/publish/:slug`
+`DELETE /api/v1/artifact/:slug` (alias: `DELETE /api/v1/publish/:slug`)
 
-Hard deletes the publish, all versions, and the slug-index entry.
+Hard deletes the artifact, all versions, and the slug-index entry.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
@@ -295,11 +325,11 @@ Hard deletes the publish, all versions, and the slug-index entry.
 
 ---
 
-### List publishes
+### List artifacts
 
-`GET /api/v1/publishes`
+`GET /api/v1/artifacts` (alias: `GET /api/v1/publishes`)
 
-Returns all publishes owned by the authenticated user.
+Returns all artifacts owned by the authenticated user.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
@@ -307,7 +337,7 @@ Returns all publishes owned by the authenticated user.
 
 ```json
 {
-  "publishes": [
+  "artifacts": [
     {
       "slug": "bright-canvas-a7k2",
       "siteUrl": "https://bright-canvas-a7k2.here.now/",
@@ -325,7 +355,7 @@ Returns all publishes owned by the authenticated user.
 
 ### Refresh upload URLs
 
-`POST /api/v1/publish/:slug/uploads/refresh`
+`POST /api/v1/artifact/:slug/uploads/refresh` (alias: `POST /api/v1/publish/:slug/uploads/refresh`)
 
 Returns fresh presigned URLs for a pending upload (same version, no new version created).
 
@@ -337,7 +367,7 @@ Use when presigned URLs expire mid-upload (they're valid for 1 hour).
 
 ### Register a handle
 
-`POST /api/v1/username`
+`POST /api/v1/handle` (alias: `POST /api/v1/username`)
 
 Registers your handle for `handle.here.now`.
 
@@ -346,14 +376,14 @@ Registers your handle for `handle.here.now`.
 **Request body:**
 
 ```json
-{ "username": "yourname" }
+{ "handle": "yourname" }
 ```
 
 **Response:**
 
 ```json
 {
-  "username": "yourname",
+  "handle": "yourname",
   "hostname": "yourname.here.now",
   "namespace_id": "uuid"
 }
@@ -365,7 +395,7 @@ Handle rules: 2-30 chars, lowercase letters/numbers/hyphens, no leading/trailing
 
 ### Get current handle
 
-`GET /api/v1/username`
+`GET /api/v1/handle` (alias: `GET /api/v1/username`)
 
 Returns your current handle and links.
 
@@ -375,7 +405,7 @@ Returns your current handle and links.
 
 ### Change handle
 
-`PATCH /api/v1/username`
+`PATCH /api/v1/handle` (alias: `PATCH /api/v1/username`)
 
 Changes an existing handle to a new one.
 
@@ -384,14 +414,14 @@ Changes an existing handle to a new one.
 **Request body:**
 
 ```json
-{ "username": "newname" }
+{ "handle": "newname" }
 ```
 
 ---
 
 ### Delete handle
 
-`DELETE /api/v1/username`
+`DELETE /api/v1/handle` (alias: `DELETE /api/v1/username`)
 
 Deletes your handle and all links under it.
 
@@ -401,7 +431,7 @@ Deletes your handle and all links under it.
 
 ### Create a link under your handle
 
-`POST /api/v1/mounts`
+`POST /api/v1/links` (alias: `POST /api/v1/mounts`)
 
 Links an artifact slug to a location under your handle.
 
@@ -411,18 +441,18 @@ Links an artifact slug to a location under your handle.
 
 ```json
 {
-  "mount_path": "docs",
+  "location": "docs",
   "slug": "bright-canvas-a7k2"
 }
 ```
 
-Use an empty `mount_path` to link at root (`https://yourname.here.now/`).
+Use an empty `location` to link at root (`https://yourname.here.now/`).
 
 ---
 
 ### List links under your handle
 
-`GET /api/v1/mounts`
+`GET /api/v1/links` (alias: `GET /api/v1/mounts`)
 
 Lists all links for your current handle.
 
@@ -432,7 +462,7 @@ Lists all links for your current handle.
 
 ### Get one link
 
-`GET /api/v1/mounts/:mount_path`
+`GET /api/v1/links/:location` (alias: `GET /api/v1/mounts/:mount_path`)
 
 Gets a single link by location. Use `__root__` for the root location.
 
@@ -442,7 +472,7 @@ Gets a single link by location. Use `__root__` for the root location.
 
 ### Update one link
 
-`PATCH /api/v1/mounts/:mount_path`
+`PATCH /api/v1/links/:location` (alias: `PATCH /api/v1/mounts/:mount_path`)
 
 Changes which artifact slug a location points to.
 
@@ -458,7 +488,7 @@ Changes which artifact slug a location points to.
 
 ### Delete one link
 
-`DELETE /api/v1/mounts/:mount_path`
+`DELETE /api/v1/links/:location` (alias: `DELETE /api/v1/mounts/:mount_path`)
 
 Removes a link by location. Use `__root__` for the root location.
 
@@ -504,7 +534,7 @@ Handle and link changes are written to Cloudflare KV and may take up to 60 secon
 
 ## URL Structure
 
-Each publish gets its own subdomain: `https://<slug>.here.now/`
+Each artifact gets its own subdomain: `https://<slug>.here.now/`
 
 Asset paths work naturally from the subdomain root:
 - `/styles.css`, `/images/a.jpg` resolve as expected
@@ -513,7 +543,7 @@ Asset paths work naturally from the subdomain root:
 ### Serving rules
 
 1. If `index.html` exists at root → serve it as the document.
-2. Else if exactly one file in the entire publish → serve an auto-viewer page (images, PDF, video, audio get rich viewers; everything else gets a download page).
+2. Else if exactly one file in the entire artifact → serve an auto-viewer page (images, PDF, video, audio get rich viewers; everything else gets a download page).
 3. Else if an `index.html` exists in any subdirectory → serve the first one found.
 4. Otherwise → serve an auto-generated directory listing. Folders are clickable, images render as a gallery, and other files are listed with sizes. No `index.html` required.
 

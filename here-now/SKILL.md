@@ -165,4 +165,14 @@ mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/
 
 For delete, metadata patch, claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
 
+## Terminology and API aliases
+
+The API is transitioning to:
+
+- `artifact` (formerly `publish`)
+- `handle` (formerly `username`)
+- `link` (formerly `mount`)
+
+Both old and new route families are supported during the transition. Existing integrations using `/api/v1/publish*`, `/api/v1/username`, or `/api/v1/mounts` continue to work.
+
 Full docs: https://here.now/docs
