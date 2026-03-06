@@ -10,7 +10,7 @@ description: >
 
 **Skill version: 1.6.4**
 
-Create a live artifact URL from any file or folder. Static hosting only.
+Create a live URL from any file or folder. Static hosting only.
 
 To install or update (recommended): `npx skills add heredotnow/skill --skill here-now -g`
 
@@ -177,6 +177,8 @@ Both old and new route families are supported during the transition. Existing in
 
 ## Handle and links quick reference
 
+- Handles are user-owned subdomain namespaces on `here.now` (for example, `yourname.here.now`) that route paths to your artifacts.
+- Claiming and using handles requires a paid plan (`hobby`).
 - Handle endpoints: `/api/v1/handle`
 - Link endpoints: `/api/v1/links` and `/api/v1/links/:location`
 - Root location sentinel for path params remains `__root__`
