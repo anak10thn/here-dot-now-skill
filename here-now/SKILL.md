@@ -8,7 +8,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.6.4**
+**Skill version: 1.6.5**
 
 Create a live URL from any file or folder. Static hosting only.
 
