@@ -335,6 +335,173 @@ Use when presigned URLs expire mid-upload (they're valid for 1 hour).
 
 ---
 
+### Register a handle
+
+`POST /api/v1/username`
+
+Registers your handle for `handle.here.now`.
+
+**Requires:** `Authorization: Bearer <API_KEY>` and a paid plan.
+
+**Request body:**
+
+```json
+{ "username": "yourname" }
+```
+
+**Response:**
+
+```json
+{
+  "username": "yourname",
+  "hostname": "yourname.here.now",
+  "namespace_id": "uuid"
+}
+```
+
+Handle rules: 2-30 chars, lowercase letters/numbers/hyphens, no leading/trailing hyphen, reserved names blocked.
+
+---
+
+### Get current handle
+
+`GET /api/v1/username`
+
+Returns your current handle and links.
+
+**Requires:** `Authorization: Bearer <API_KEY>`
+
+---
+
+### Change handle
+
+`PATCH /api/v1/username`
+
+Changes an existing handle to a new one.
+
+**Requires:** `Authorization: Bearer <API_KEY>` and a paid plan.
+
+**Request body:**
+
+```json
+{ "username": "newname" }
+```
+
+---
+
+### Delete handle
+
+`DELETE /api/v1/username`
+
+Deletes your handle and all links under it.
+
+**Requires:** `Authorization: Bearer <API_KEY>`
+
+---
+
+### Create a link under your handle
+
+`POST /api/v1/mounts`
+
+Links an artifact slug to a location under your handle.
+
+**Requires:** `Authorization: Bearer <API_KEY>` and a paid plan.
+
+**Request body:**
+
+```json
+{
+  "mount_path": "docs",
+  "slug": "bright-canvas-a7k2"
+}
+```
+
+Use an empty `mount_path` to link at root (`https://yourname.here.now/`).
+
+---
+
+### List links under your handle
+
+`GET /api/v1/mounts`
+
+Lists all links for your current handle.
+
+**Requires:** `Authorization: Bearer <API_KEY>`
+
+---
+
+### Get one link
+
+`GET /api/v1/mounts/:mount_path`
+
+Gets a single link by location. Use `__root__` for the root location.
+
+**Requires:** `Authorization: Bearer <API_KEY>`
+
+---
+
+### Update one link
+
+`PATCH /api/v1/mounts/:mount_path`
+
+Changes which artifact slug a location points to.
+
+**Requires:** `Authorization: Bearer <API_KEY>` and a paid plan.
+
+**Request body:**
+
+```json
+{ "slug": "another-slug-x9f1" }
+```
+
+---
+
+### Delete one link
+
+`DELETE /api/v1/mounts/:mount_path`
+
+Removes a link by location. Use `__root__` for the root location.
+
+**Requires:** `Authorization: Bearer <API_KEY>` and a paid plan.
+
+---
+
+### Start checkout (paid plan)
+
+`POST /api/v1/billing/checkout`
+
+Creates a Stripe checkout session for the Hobby plan.
+
+**Requires:** `Authorization: Bearer <API_KEY>` (or browser session auth).
+
+**Response:**
+
+```json
+{ "url": "https://checkout.stripe.com/..." }
+```
+
+---
+
+### Open billing portal
+
+`POST /api/v1/billing/portal`
+
+Creates a Stripe billing portal session.
+
+**Requires:** `Authorization: Bearer <API_KEY>` (or browser session auth).
+
+**Response:**
+
+```json
+{ "url": "https://billing.stripe.com/..." }
+```
+
+---
+
+Handle and link changes are written to Cloudflare KV and may take up to 60 seconds to propagate globally.
+
+---
+
 ## URL Structure
 
 Each publish gets its own subdomain: `https://<slug>.here.now/`
@@ -358,5 +525,5 @@ Direct file paths always work: `https://<slug>.here.now/report.pdf`
 | -------------- | ------------------ | ---------------------------- |
 | Max file size  | 250 MB             | 5 GB                         |
 | Expiry         | 24 hours           | Permanent (or custom TTL)    |
-| Rate limit     | 5 / hour / IP      | 60 / hour / account          |
+| Rate limit     | 5 / hour / IP      | 60 / hour free, 200 / hour hobby |
 | Account needed | No                 | Yes (get key at here.now)    |

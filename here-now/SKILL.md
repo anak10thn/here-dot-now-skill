@@ -116,7 +116,7 @@ Never present this local file path as a URL, and never use it as source of truth
 | -------------- | ------------------ | ---------------------------- |
 | Max file size  | 250 MB             | 5 GB                         |
 | Expiry         | 24 hours           | Permanent (or custom TTL)    |
-| Rate limit     | 5 / hour / IP      | 60 / hour / account          |
+| Rate limit     | 5 / hour / IP      | 60 / hour free, 200 / hour hobby |
 | Account needed | No                 | Yes (get key at here.now)    |
 
 ## Getting an API key
