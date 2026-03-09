@@ -241,7 +241,7 @@ Removes the domain and all links under it.
 
 ### Key points
 
-- Custom domains require Hobby plan or above (up to 3 domains on Hobby)
+- Custom domains: 1 on Free, up to 5 on Hobby
 - Most domains use an ALIAS record (sometimes called ANAME or CNAME flattening)
 - Subdomains (e.g. `docs.example.com`) can also use a standard CNAME record
 - Domain endpoints: `/api/v1/domains` and `/api/v1/domains/:domain`

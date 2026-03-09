@@ -513,7 +513,7 @@ To delete a link from a custom domain (instead of your handle), add `?domain=exa
 
 `POST /api/v1/domains`
 
-Registers a custom domain for your account. Requires a paid plan (Hobby: up to 3 domains).
+Registers a custom domain for your account. Free plan: 1 domain. Hobby plan: up to 5 domains.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
