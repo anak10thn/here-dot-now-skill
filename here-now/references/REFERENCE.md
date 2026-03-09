@@ -531,15 +531,15 @@ Registers a custom domain for your account. Requires a paid plan (Hobby: up to 3
   "namespace_id": "uuid",
   "status": "pending",
   "dns_instructions": {
-    "type": "CNAME",
+    "type": "ALIAS",
     "name": "example.com",
     "target": "fallback.here.now",
-    "note": "If example.com is an apex domain, your DNS provider must support CNAME flattening or ALIAS records."
+    "note": "Add an ALIAS record pointing to fallback.here.now. For subdomains, a CNAME record also works."
   }
 }
 ```
 
-After adding, configure DNS as indicated. SSL is provisioned automatically by Cloudflare once DNS is verified.
+After adding, configure DNS: add an ALIAS record (or CNAME for subdomains) pointing to `fallback.here.now`. SSL is provisioned automatically by Cloudflare once DNS is verified.
 
 ---
 

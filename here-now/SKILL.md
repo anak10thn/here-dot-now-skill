@@ -199,7 +199,7 @@ curl -sS https://here.now/api/v1/domains \
   -d '{"domain": "example.com"}'
 ```
 
-Response includes DNS instructions. Point a CNAME (or ALIAS for apex domains) to `fallback.here.now`. SSL is provisioned automatically.
+Response includes DNS instructions. Point an ALIAS record (or CNAME for subdomains) to `fallback.here.now`. SSL is provisioned automatically.
 
 ### Check domain status
 
@@ -242,8 +242,8 @@ Removes the domain and all links under it.
 ### Key points
 
 - Custom domains require Hobby plan or above (up to 3 domains on Hobby)
-- Apex domains (e.g. `example.com`) require your DNS provider to support ALIAS or CNAME flattening
-- Subdomains (e.g. `docs.example.com`) use standard CNAME records
+- Most domains use an ALIAS record (sometimes called ANAME or CNAME flattening)
+- Subdomains (e.g. `docs.example.com`) can also use a standard CNAME record
 - Domain endpoints: `/api/v1/domains` and `/api/v1/domains/:domain`
 - Links to custom domains use the same `/api/v1/links` endpoint with an added `domain` parameter
 - Changes propagate globally in up to 60 seconds (Cloudflare KV)
