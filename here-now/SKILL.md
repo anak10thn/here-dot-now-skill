@@ -10,7 +10,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.6.6**
+**Skill version: 1.6.8**
 
 Create a live URL from any file or folder. Static hosting only.
 
@@ -106,11 +106,10 @@ Never present this local file path as a URL, and never use it as source of truth
 ## What to tell the user
 
 - Always share the `siteUrl` from the current script run.
-- Read and follow `publish_result.*` lines from script stderr.
-- Only state "expires in 24 hours" when `publish_result.auth_mode=anonymous`.
-- Only share a claim URL when `publish_result.claim_url` is non-empty and starts with `https://`.
+- Read and follow `publish_result.*` lines from script stderr to determine auth mode.
+- When `publish_result.auth_mode=authenticated`: tell the user the site is **permanent** and saved to their account. No claim URL is needed.
+- When `publish_result.auth_mode=anonymous`: tell the user the site **expires in 24 hours**. Share the claim URL (if `publish_result.claim_url` is non-empty and starts with `https://`) so they can keep it permanently. Warn that claim tokens are only returned once and cannot be recovered.
 - Never tell the user to inspect `.herenow/state.json` for claim URLs or auth status.
-- Warn: claim tokens are only returned once and cannot be recovered.
 
 ## Limits
 
