@@ -276,11 +276,11 @@ Users can also claim by visiting the `claimUrl` in a browser and signing in.
 
 ---
 
-### Patch viewer metadata
+### Patch metadata
 
 `PATCH /api/v1/artifact/:slug/metadata` (alias: `PATCH /api/v1/publish/:slug/metadata`)
 
-Update title, description, og:image, or TTL without re-uploading files.
+Update title, description, og:image, TTL, or password without re-uploading files.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
@@ -293,11 +293,14 @@ Update title, description, og:image, or TTL without re-uploading files.
     "title": "Updated title",
     "description": "New description",
     "ogImagePath": "assets/cover.png"
-  }
+  },
+  "password": "secret123"
 }
 ```
 
 All fields optional. `ogImagePath` must reference an image file within the current artifact.
+
+- `password`: string to set or change, `null` to remove, omit for no change. When set, visitors must enter the password before any content is served. Server-side enforcement — content is never sent to the browser without verification. Changing or removing the password immediately invalidates all existing sessions.
 
 **Response:**
 
@@ -305,11 +308,12 @@ All fields optional. `ogImagePath` must reference an image file within the curre
 {
   "success": true,
   "effectiveForRootDocument": true,
-  "note": "Viewer metadata applies because this artifact has no index.html."
+  "note": "Viewer metadata applies because this artifact has no index.html.",
+  "passwordProtected": true
 }
 ```
 
-If the artifact has an `index.html`, viewer metadata is stored but the site's own HTML controls what browsers see.
+If the artifact has an `index.html`, viewer metadata is stored but the site's own HTML controls what browsers see. `passwordProtected` is included when the `password` field was provided.
 
 ---
 

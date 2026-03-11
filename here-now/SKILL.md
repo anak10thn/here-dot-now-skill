@@ -164,7 +164,7 @@ mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/
 
 ## Beyond the script
 
-For delete, metadata patch, claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
+For delete, metadata patch (including password protection), claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
 
 ## Terminology and API aliases
 
