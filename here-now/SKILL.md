@@ -10,7 +10,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.7.1**
+**Skill version: 1.8.0**
 
 Create a live URL from any file or folder. Static hosting only.
 
@@ -162,9 +162,29 @@ mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/
 | `--allow-nonherenow-base-url` | Allow sending auth to non-default `--base-url` |
 | `--api-key {key}`      | API key override (prefer credentials file)    |
 
+## Duplicate a site
+
+```bash
+curl -sS -X POST https://here.now/api/v1/publish/{slug}/duplicate \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+Creates a full copy of the site under a new slug. All files are copied server-side — no upload needed. The new site is immediately live. Requires authentication and ownership of the source site.
+
+Optionally override viewer metadata (shallow-merged with the source):
+
+```bash
+curl -sS -X POST https://here.now/api/v1/publish/{slug}/duplicate \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"viewer": {"title": "My Copy"}}'
+```
+
 ## Beyond the script
 
-For delete, metadata patch (including password protection), claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
+For delete, metadata patch (including password protection), duplicate, claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
 
 ## Handle and links quick reference
 

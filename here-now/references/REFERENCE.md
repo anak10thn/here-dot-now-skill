@@ -279,6 +279,52 @@ Password protection survives redeploys — it's metadata, not content. Changing 
 
 ---
 
+### Duplicate a site
+
+`POST /api/v1/publish/:slug/duplicate`
+
+Creates a complete server-side copy of the site under a new slug. All files are copied within R2 — no client upload or finalize step needed. The new site is immediately live.
+
+Copies all files and viewer metadata. Does not copy password protection, handle/domain links, or TTL.
+
+**Requires:** `Authorization: Bearer <API_KEY>` (must own the source site)
+
+**Request body:** (optional)
+
+```json
+{
+  "viewer": {
+    "title": "My Copy",
+    "description": "Copy of bright-canvas-a7k2"
+  }
+}
+```
+
+- `viewer` (optional): Shallow-merged with the source site's viewer metadata. Only provided fields are overridden; omitted fields are preserved from the source. If `viewer` is omitted entirely, the source's metadata is copied as-is.
+
+**Response:**
+
+```json
+{
+  "slug": "warm-lake-f3k9",
+  "siteUrl": "https://warm-lake-f3k9.here.now/",
+  "sourceSlug": "bright-canvas-a7k2",
+  "status": "active",
+  "currentVersionId": "01J...",
+  "filesCount": 36
+}
+```
+
+| Status | Condition |
+|--------|-----------|
+| 401 | Missing or invalid API key |
+| 403 | API key doesn't match the source site's owner |
+| 404 | Source slug doesn't exist or is deleted |
+| 409 | Source site is in `pending` status (not yet finalized) |
+| 429 | Rate limit exceeded |
+
+---
+
 ### Patch metadata
 
 `PATCH /api/v1/publish/:slug/metadata` (alias: `PATCH /api/v1/artifact/:slug/metadata`)
