@@ -91,23 +91,6 @@ The credentials file is the recommended storage method. Avoid passing the key vi
 
 ## Endpoints
 
-### Naming transition (backward compatibility)
-
-The preferred API terms are:
-
-- `site` for published content
-- `handle` for your subdomain namespace
-- `link` for connecting a site to a handle location
-
-Two route families exist and are fully equivalent:
-
-- **Primary:** `/api/v1/publish`, `/api/v1/publishes`, `/api/v1/handle`, `/api/v1/links`
-- **Aliases:** `/api/v1/artifact`, `/api/v1/artifacts`, `/api/v1/username`, `/api/v1/mounts`
-
-Both route families accept the same request bodies and return the same response shapes.
-
----
-
 ### Create a new site
 
 `POST /api/v1/publish` (alias: `POST /api/v1/artifact`)

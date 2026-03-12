@@ -166,16 +166,6 @@ mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/
 
 For delete, metadata patch (including password protection), claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
 
-## Terminology and API aliases
-
-The user-facing term for published content is "site". The API routes use:
-
-- `/api/v1/publish` and `/api/v1/artifact` — both equivalent
-- `/api/v1/handle` and `/api/v1/username` — both equivalent
-- `/api/v1/links` and `/api/v1/mounts` — both equivalent
-
-All route families are fully supported. Existing integrations continue to work.
-
 ## Handle and links quick reference
 
 - Handles are user-owned subdomain namespaces on `here.now` (for example, `yourname.here.now`) that route paths to your sites.
