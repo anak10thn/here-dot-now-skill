@@ -10,15 +10,13 @@ description: >
 
 # here.now
 
-**Skill version: 1.8.0**
+**Skill version: 1.8.1**
 
 Create a live URL from any file or folder. Static hosting only.
 
 To install or update (recommended): `npx skills add heredotnow/skill --skill here-now -g`
 
 For repo-pinned/project-local installs, run the same command without `-g`.
-
-If npm is unavailable, see fallback install docs: https://here.now/docs#install-skill
 
 ## Requirements
 
