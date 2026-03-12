@@ -283,7 +283,7 @@ Password protection survives redeploys — it's metadata, not content. Changing 
 
 `POST /api/v1/publish/:slug/duplicate`
 
-Creates a complete server-side copy of the site under a new slug. All files are copied within R2 — no client upload or finalize step needed. The new site is immediately live.
+Creates a complete server-side copy of the site under a new slug. All files are copied server-side — no client upload or finalize step needed. The new site is immediately live.
 
 Copies all files and viewer metadata. Does not copy password protection, handle/domain links, or TTL.
 
