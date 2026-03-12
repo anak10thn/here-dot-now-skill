@@ -278,7 +278,7 @@ Users can also claim by visiting the `claimUrl` in a browser and signing in.
 
 ### Password protection
 
-Add a password to any artifact so visitors must authenticate before viewing. This is server-side enforcement — the Worker never sends content to the browser until the password is verified. All files under the artifact are protected, not just the index page.
+Add a password to any artifact so visitors must authenticate before viewing. This is server-side enforcement — content is never sent to the browser until the password is verified. All files under the artifact are protected, not just the index page.
 
 Set or change a password via `PATCH /api/v1/artifact/:slug/metadata` with `{"password": "secret"}`. Remove it with `{"password": null}`. You can also manage passwords from the dashboard via the `⋯` menu on each artifact.
 
