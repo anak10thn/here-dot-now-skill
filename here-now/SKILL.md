@@ -10,7 +10,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.8.1**
+**Skill version: 1.8.2**
 
 Create a live URL from any file or folder. Static hosting only.
 
@@ -187,7 +187,7 @@ For delete, metadata patch (including password protection), duplicate, claim, li
 ## Handle and links quick reference
 
 - Handles are user-owned subdomain namespaces on `here.now` (for example, `yourname.here.now`) that route paths to your sites.
-- Any account with an API key can claim a handle.
+- Claiming a handle requires a paid plan (Hobby or above).
 - Handle endpoints: `/api/v1/handle`
 - Link endpoints: `/api/v1/links` and `/api/v1/links/:location`
 - Root location sentinel for path params remains `__root__`

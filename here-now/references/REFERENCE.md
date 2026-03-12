@@ -457,7 +457,7 @@ Use when presigned URLs expire mid-upload (they're valid for 1 hour).
 
 `POST /api/v1/handle`
 
-Registers your handle for `handle.here.now`.
+Registers your handle for `handle.here.now`. Requires a paid plan (Hobby or above). Returns 403 with `upgrade_url` on the free plan.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
@@ -495,7 +495,7 @@ Returns your current handle and links.
 
 `PATCH /api/v1/handle`
 
-Changes an existing handle to a new one.
+Changes an existing handle to a new one. Requires a paid plan (Hobby or above). Returns 403 with `upgrade_url` on the free plan.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
