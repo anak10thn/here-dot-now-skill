@@ -10,7 +10,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.7.0**
+**Skill version: 1.7.1**
 
 Create a live URL from any file or folder. Static hosting only.
 
@@ -78,7 +78,7 @@ To store a key, write it to the credentials file:
 mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/.herenow/credentials
 ```
 
-**IMPORTANT**: Never pass the API key directly in shell commands. Always write it to `~/.herenow/credentials` using the command above. This keeps the key out of terminal history and logs.
+**IMPORTANT**: After receiving an API key, save it immediately — run the command above yourself. Do not ask the user to run it manually. Avoid passing the key via CLI flags (e.g. `--api-key`) in interactive sessions; the credentials file is the preferred storage method.
 
 Never commit credentials or local state files (`~/.herenow/credentials`, `.herenow/state.json`) to source control.
 
@@ -142,7 +142,7 @@ curl -sS https://here.now/api/auth/agent/verify-code \
   -d '{"email":"user@example.com","code":"ABCD-2345"}'
 ```
 
-5. Save the returned `apiKey`:
+5. Save the returned `apiKey` yourself (do not ask the user to do this):
 
 ```bash
 mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/.herenow/credentials

@@ -24,9 +24,13 @@ Examples:
 
 This helps here.now debug publish reliability by client. Missing or invalid values are ignored; publishes are never rejected because this header is absent.
 
-### Getting an API key (agent-assisted sign-up)
+### Getting an API key
 
-Agents can complete sign-up without requiring the user to open the dashboard:
+There are two ways to obtain an API key:
+
+#### Option A: Agent-assisted sign-up
+
+The sign-up flow can be completed entirely within the agent, without requiring the user to open a browser.
 
 **1. Request a one-time code by email:**
 
@@ -65,7 +69,25 @@ Response:
 
 If the code is invalid or expired, verify returns `400`.
 
-The browser sign-in flow (`POST /api/auth/login`) remains available for normal web sessions.
+**4. Save the API key to the credentials file:**
+
+```bash
+mkdir -p ~/.herenow && echo "<API_KEY>" > ~/.herenow/credentials && chmod 600 ~/.herenow/credentials
+```
+
+#### Option B: Dashboard sign-up
+
+Users can also sign in at [here.now](https://here.now) and copy their API key from the dashboard. The key should then be saved to the credentials file using the same command as step 4 above.
+
+### Storing the API key
+
+The publish script reads the API key from these sources (first match wins):
+
+1. `--api-key {key}` flag (CI/scripting only — avoid in interactive use)
+2. `$HERENOW_API_KEY` environment variable
+3. `~/.herenow/credentials` file (recommended)
+
+The credentials file is the recommended storage method. Avoid passing the key via CLI flags in interactive sessions.
 
 ## Endpoints
 
