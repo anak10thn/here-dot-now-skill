@@ -206,9 +206,16 @@ curl -sS https://here.now/api/v1/domains \
   -d '{"domain": "example.com"}'
 ```
 
-Response includes DNS instructions. Point an ALIAS record (or CNAME for subdomains) to `fallback.here.now`. SSL is provisioned automatically.
+The response includes `is_apex`, DNS instructions, and (for apex domains) an `ownership_verification` object with TXT record details.
 
-Most domains use an ALIAS record (sometimes called ANAME or CNAME flattening). Subdomains (e.g. `docs.example.com`) can also use a standard CNAME record.
+**DNS setup by domain type:**
+
+- **Subdomains** (e.g. `docs.example.com`): Add a **CNAME** record pointing to `fallback.here.now`.
+- **Apex domains** (e.g. `example.com`):
+  1. Add an **ALIAS** record pointing to `fallback.here.now`. (Your DNS provider may call this ANAME or CNAME flattening.)
+  2. Add a **TXT** record using the `name` and `value` from the `ownership_verification` field in the response.
+
+SSL is provisioned automatically once DNS is verified.
 
 ### Check domain status
 
@@ -217,7 +224,7 @@ curl -sS https://here.now/api/v1/domains/example.com \
   -H "Authorization: Bearer {API_KEY}"
 ```
 
-Status is `pending` until DNS is verified and SSL is active, then becomes `active`.
+Status is `pending` until DNS is verified and SSL is active, then becomes `active`. For apex domains, the response includes `ownership_verification` with the TXT record details and may include `verification_errors` if there are issues.
 
 ### List custom domains
 
