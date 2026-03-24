@@ -10,7 +10,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.8.3**
+**Skill version: 1.9.0**
 
 Create a live URL from any file or folder. Static hosting only.
 
@@ -182,7 +182,32 @@ curl -sS -X POST https://here.now/api/v1/publish/{slug}/duplicate \
 
 ## Beyond the script
 
-For delete, metadata patch (including password protection), duplicate, claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
+For delete, metadata patch (including password protection and payment gating), duplicate, claim, list, and other operations, see [references/REFERENCE.md](references/REFERENCE.md).
+
+## Payment gating
+
+Sites can require stablecoin payment on the Tempo network before granting access. Payments go directly from the visitor's wallet to the publisher's wallet.
+
+**CLI commands:**
+
+```bash
+# Set your Tempo wallet address (once)
+herenow wallet set 0xYOUR_ADDRESS --api-key $HERENOW_API_KEY
+
+# Require payment on a site
+herenow price set <slug> 0.50 --api-key $HERENOW_API_KEY
+
+# Use a different wallet for a specific site
+herenow price set <slug> 1.00 --wallet 0xOTHER_ADDRESS --api-key $HERENOW_API_KEY
+
+# Remove payment requirement
+herenow price remove <slug> --api-key $HERENOW_API_KEY
+
+# Check your wallet address
+herenow wallet --api-key $HERENOW_API_KEY
+```
+
+Payment gating and password protection are mutually exclusive. You can also manage payments from the dashboard (Wallet tab for address, site menu for pricing).
 
 ## Handle
 
