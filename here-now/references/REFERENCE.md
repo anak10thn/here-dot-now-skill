@@ -294,6 +294,36 @@ Visitors see a payment page with a QR code and deposit address. After paying, ac
 
 Payment gating survives redeploys. Changing or removing the price immediately invalidates all existing access sessions. Requires an authenticated site with a wallet address configured.
 
+#### 402 response for agents
+
+When a programmatic client (non-browser) hits a paid site, the response includes the MPP `WWW-Authenticate: Payment` challenge header plus a JSON body with session URLs for agents that don't have mppx installed:
+
+```json
+{
+  "price": {
+    "amount": "0.10",
+    "currency": "USD",
+    "recipientAddress": "0xe661..."
+  },
+  "paymentSession": {
+    "createUrl": "https://here.now/api/pay/<slug>/session",
+    "pollUrl": "https://here.now/api/pay/<slug>/poll",
+    "grantUrl": "https://here.now/api/pay/<slug>/grant"
+  },
+  "walletUrl": "https://wallet.tempo.xyz/"
+}
+```
+
+**Session flow (for agents without mppx):**
+
+1. `POST <createUrl>` with `{}` to create a payment session. Returns `{ sessionId, address, amount, currency, expiresAt }`.
+2. Show the user the deposit address and amount. The address is unique to this session.
+3. `POST <pollUrl>` with `{ "sessionId": "<id>" }` every few seconds. Returns `{ found: true, txHash }` when payment is detected.
+4. `POST <grantUrl>` with `{ "sessionId": "<id>", "txHash": "<hash>" }`. Returns `{ token }`.
+5. Fetch the original URL with `?__hn_grant=<token>` to retrieve the content.
+
+Sessions expire after 30 minutes. Create a new session if the current one expires.
+
 ---
 
 ### Wallet management

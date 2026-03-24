@@ -209,6 +209,44 @@ herenow wallet --api-key $HERENOW_API_KEY
 
 Payment gating and password protection are mutually exclusive. You can also manage payments from the dashboard (Wallet tab for address, site menu for pricing).
 
+## Accessing a paid site
+
+If you fetch a here.now URL and get a `402 Payment Required` response, the site requires payment.
+
+**If you have Tempo wallet + mppx installed:** payment is handled automatically. No action needed.
+
+**If you have the Tempo CLI:** run `tempo request <url>` to pay and retrieve the content.
+
+**If you don't have Tempo:** use the payment session flow. The 402 response body includes `paymentSession` URLs:
+
+```json
+{
+  "price": { "amount": "0.10", "currency": "USD" },
+  "paymentSession": {
+    "createUrl": "https://here.now/api/pay/<slug>/session",
+    "pollUrl": "https://here.now/api/pay/<slug>/poll",
+    "grantUrl": "https://here.now/api/pay/<slug>/grant"
+  },
+  "walletUrl": "https://wallet.tempo.xyz/"
+}
+```
+
+Steps:
+
+1. `POST <createUrl>` to get a unique deposit address and session ID
+2. Show the user the amount, deposit address, and wallet link (`https://wallet.tempo.xyz/`)
+3. Poll `POST <pollUrl>` with `{"sessionId": "<id>"}` every 3 seconds
+4. When the response has `"found": true`, call `POST <grantUrl>` with `{"sessionId": "<id>", "txHash": "<hash>"}`
+5. The response contains a `token`. Fetch the original URL with `?__hn_grant=<token>` to get the content.
+
+Example message to the user:
+
+> This site requires payment of $0.10 (USD) on the Tempo network.
+> Send $0.10 to: 0xBd46...DbB6
+> If you need a Tempo wallet: https://wallet.tempo.xyz/
+
+The agent should poll silently and present the content once payment is detected.
+
 ## Handle
 
 Handles are user-owned subdomain namespaces on `here.now` (for example, `yourname.here.now`) that route paths to your sites. Claiming a handle requires a paid plan (Hobby or above).
