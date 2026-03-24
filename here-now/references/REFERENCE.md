@@ -414,7 +414,7 @@ Update title, description, og:image, TTL, password, or price without re-uploadin
 All fields optional. `ogImagePath` must reference an image file within the current site.
 
 - `password`: string to set or change, `null` to remove, omit for no change. When set, visitors must enter the password before any content is served. Server-side enforcement. Changing or removing the password immediately invalidates all existing sessions.
-- `price`: object to set or change, `null` to remove, omit for no change. Requires a wallet address on the account (see Wallet management). Fields:
+- `price`: object to set, change, or remove. `null` removes the price, omit for no change. To change the price, set it again with the new amount (existing access sessions are invalidated). Requires a wallet address on the account (see Wallet management). Fields:
   - `amount` (required): price in USD as a string (e.g. `"0.50"`, `".25"`, `"5"`)
   - `currency` (required): `"USD"`
   - `recipientAddress` (optional): per-site wallet override. If omitted, uses the account-level wallet address.

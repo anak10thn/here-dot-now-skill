@@ -194,7 +194,7 @@ Sites can require stablecoin payment on the Tempo network before granting access
 # Set your Tempo wallet address (once)
 herenow wallet set 0xYOUR_ADDRESS --api-key $HERENOW_API_KEY
 
-# Require payment on a site
+# Require payment on a site (or change an existing price)
 herenow price set <slug> 0.50 --api-key $HERENOW_API_KEY
 
 # Use a different wallet for a specific site
