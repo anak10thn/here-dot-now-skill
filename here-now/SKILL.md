@@ -188,6 +188,8 @@ For delete, metadata patch (including password protection and payment gating), d
 
 Sites can require stablecoin payment on the Tempo network before granting access. Payments go directly from the visitor's wallet to the publisher's wallet.
 
+To receive payments you need a Tempo wallet address. Get one at [wallet.tempo.xyz](https://wallet.tempo.xyz/) or by running `npx mppx account create`.
+
 **CLI commands:**
 
 ```bash
