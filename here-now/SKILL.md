@@ -2,17 +2,19 @@
 name: here-now
 description: >
   Publish files and folders to the web instantly. Static hosting for HTML sites,
-  images, PDFs, and any file type. Use when asked to "publish this", "host this",
-  "deploy this", "share this on the web", "make a website", "put this online",
-  "upload to the web", "create a webpage", "share a link", "serve this site",
-  or "generate a URL". Outputs a live, shareable URL at {slug}.here.now.
+  images, PDFs, and any file type. Sites can connect to external APIs (LLMs,
+  databases, email, payments) via proxy routes with server-side credential
+  injection. Use when asked to "publish this", "host this", "deploy this",
+  "share this on the web", "make a website", "put this online", "upload to
+  the web", "create a webpage", "share a link", "serve this site", "generate
+  a URL", or "build a chatbot". Outputs a live, shareable URL at {slug}.here.now.
 ---
 
 # here.now
 
-**Skill version: 1.9.0**
+**Skill version: 1.10.0**
 
-Create a live URL from any file or folder. Static hosting only.
+Create a live URL from any file or folder. Static hosting with optional proxy routes for calling external APIs server-side.
 
 To install or update (recommended): `npx skills add heredotnow/skill --skill here-now -g`
 
@@ -248,6 +250,103 @@ Example message to the user:
 > If you need a Tempo wallet: https://wallet.tempo.xyz/
 
 The agent should poll silently and present the content once payment is detected.
+
+## Service variables and proxy routes
+
+Sites can make authenticated API calls to external services without exposing secrets in client-side code. Store API keys as variables on the account, add a proxy manifest to the site, and the site's frontend calls a relative URL that here.now proxies server-side.
+
+### Store variables on the account
+
+Variables are account-level. Set them once and every site can use them.
+
+```bash
+curl -sS -X PUT https://here.now/api/v1/me/variables/OPENROUTER_API_KEY \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"value": "sk-or-v1-abc123"}'
+```
+
+List variables (values are never returned):
+
+```bash
+curl -sS https://here.now/api/v1/me/variables \
+  -H "Authorization: Bearer {API_KEY}"
+```
+
+Delete a variable:
+
+```bash
+curl -sS -X DELETE https://here.now/api/v1/me/variables/OPENROUTER_API_KEY \
+  -H "Authorization: Bearer {API_KEY}"
+```
+
+Variable names must be uppercase letters, digits, and underscores, starting with a letter (e.g. `OPENROUTER_API_KEY`). Max 50 variables per account, 4 KB per value.
+
+Users can also manage variables from the dashboard (Variables tab).
+
+### Add a proxy manifest to the site
+
+Create a `.herenow/proxy.json` file in the site directory:
+
+```json
+{
+  "proxies": {
+    "/api/chat": {
+      "upstream": "https://openrouter.ai/api/v1/chat/completions",
+      "method": "POST",
+      "headers": {
+        "Authorization": "Bearer ${OPENROUTER_API_KEY}"
+      }
+    },
+    "/api/db/*": {
+      "upstream": "https://xyz.supabase.co/rest/v1",
+      "headers": {
+        "apikey": "${SUPABASE_KEY}",
+        "Authorization": "Bearer ${SUPABASE_KEY}"
+      }
+    }
+  }
+}
+```
+
+Each key is a path on the site. Exact paths (like `/api/chat`) match that path only. Prefix patterns (like `/api/db/*`) match any path starting with that prefix — the rest is appended to the upstream URL. Query parameters are forwarded automatically.
+
+`${VAR_NAME}` references are resolved from the account's variables at request time. Headers like `Content-Type` and `Accept` are forwarded from the browser automatically; the manifest only needs to declare the auth header.
+
+### Frontend calls a relative URL
+
+```javascript
+const res = await fetch('/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: 'anthropic/claude-sonnet-4',
+    messages: [{ role: 'user', content: question }],
+    stream: true
+  })
+});
+```
+
+The browser hits its own site's URL. here.now intercepts the request, injects the API key server-side, forwards to the upstream, and streams the response back. The key never reaches the browser.
+
+### Common proxy configurations
+
+| Service | Upstream | Auth header |
+|---|---|---|
+| OpenRouter | `https://openrouter.ai/api/v1/chat/completions` | `Authorization: Bearer ${OPENROUTER_API_KEY}` |
+| Supabase | `https://xyz.supabase.co/rest/v1` | `apikey: ${SUPABASE_KEY}` |
+| Resend | `https://api.resend.com/emails` | `Authorization: Bearer ${RESEND_API_KEY}` |
+| Stripe | `https://api.stripe.com/v1` | `Authorization: Bearer ${STRIPE_SECRET_KEY}` |
+| Airtable | `https://api.airtable.com/v0` | `Authorization: Bearer ${AIRTABLE_API_KEY}` |
+
+### Notes
+
+- Proxy routes require an authenticated site (anonymous sites return 403 on proxy requests).
+- Streaming (SSE) works out of the box for LLM responses.
+- Rate limiting: 100 requests/hour/IP by default. Override per route with `"rateLimit": "20/hour/ip"` in the manifest.
+- Request body size limit: 10 MB.
+- The `.herenow/proxy.json` file is never served to site visitors.
+- Variable changes propagate within about a minute. Proxy route config changes propagate within about 10 seconds.
 
 ## Handle
 
