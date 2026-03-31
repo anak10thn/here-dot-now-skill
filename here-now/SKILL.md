@@ -12,7 +12,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.10.0**
+**Skill version: 1.11.0**
 
 Create a live URL from any file or folder. Static hosting with optional proxy routes for calling external APIs server-side.
 
@@ -161,6 +161,28 @@ mkdir -p ~/.herenow && echo "{API_KEY}" > ~/.herenow/credentials && chmod 600 ~/
 | `--base-url {url}`     | API base URL (default: `https://here.now`)    |
 | `--allow-nonherenow-base-url` | Allow sending auth to non-default `--base-url` |
 | `--api-key {key}`      | API key override (prefer credentials file)    |
+| `--spa`                | Enable SPA routing (serve index.html for unknown paths) |
+
+## SPA routing
+
+For React, Vue, Svelte, and other single-page applications, pass `--spa` when publishing:
+
+```bash
+./scripts/publish.sh ./dist --spa
+```
+
+This tells here.now to serve `index.html` for any path that doesn't match a real file, so client-side routing works on refresh and direct links. Without `--spa`, unknown paths return 404.
+
+You can also toggle SPA mode on an existing site without re-publishing:
+
+```bash
+curl -sS -X PATCH https://here.now/api/v1/publish/{slug}/metadata \
+  -H "Authorization: Bearer {API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"spaMode": true}'
+```
+
+**Asset paths:** Make sure the build uses root-relative paths (`/assets/app.js`) not bare relative paths (`assets/app.js`). Vite and Create React App do this by default.
 
 ## Duplicate a site
 
