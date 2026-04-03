@@ -401,6 +401,8 @@ The response includes `is_apex`, DNS instructions, and (for apex domains) an `ow
   1. Add an **ALIAS** record pointing to `fallback.here.now`. (Your DNS provider may call this ANAME or CNAME flattening.)
   2. Add a **TXT** record using the `name` and `value` from the `ownership_verification` field in the response.
 
+**Tip:** Not all DNS providers support ALIAS records for apex domains. If yours doesn't, use `www.example.com` with a CNAME instead, then set up a redirect from the apex to `www` at your registrar.
+
 SSL is provisioned automatically once DNS is verified.
 
 ### Check domain status
