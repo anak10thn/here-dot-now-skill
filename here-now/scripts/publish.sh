@@ -19,6 +19,8 @@ TARGET=""
 FORKABLE=""
 FORKED_FROM=""
 SPA_MODE=""
+FORK_MODE=""
+FORK_OUT=""
 
 usage() {
   cat <<'USAGE'
@@ -71,11 +73,75 @@ while [[ $# -gt 0 ]]; do
     --forkable)     FORKABLE="true"; shift ;;
     --forked-from)  FORKED_FROM="$2"; shift 2 ;;
     --spa)          SPA_MODE="true"; shift ;;
+    --fork)         FORK_MODE="true"; shift ;;
+    --out)          FORK_OUT="$2"; shift 2 ;;
     --help|-h)      usage ;;
     -*)             die "unknown option: $1" ;;
     *)              [[ -z "$TARGET" ]] && TARGET="$1" || die "unexpected argument: $1"; shift ;;
   esac
 done
+
+# Fork mode: download all files from a forkable site
+if [[ "$FORK_MODE" == "true" ]]; then
+  FORK_SLUG="$TARGET"
+  [[ -n "$FORK_SLUG" ]] || die "usage: publish.sh --fork <slug> [--out <dir>]"
+  OUT_DIR="${FORK_OUT:-./$FORK_SLUG}"
+
+  echo "fetching manifest for $FORK_SLUG..." >&2
+  MANIFEST=$(curl -sS "https://${FORK_SLUG}.here.now/.herenow/manifest.json")
+  if echo "$MANIFEST" | "$JQ_BIN" -e '.error' >/dev/null 2>&1 || [[ -z "$MANIFEST" ]]; then
+    die "site $FORK_SLUG is not forkable or does not exist"
+  fi
+
+  FILE_COUNT=$(echo "$MANIFEST" | "$JQ_BIN" '.files | length')
+  echo "downloading $FORK_SLUG ($FILE_COUNT files)..." >&2
+  mkdir -p "$OUT_DIR"
+
+  DOWNLOAD_ERRORS=0
+  for i in $(seq 0 $((FILE_COUNT - 1))); do
+    fpath=$(echo "$MANIFEST" | "$JQ_BIN" -r ".files[$i].path")
+    encoded=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$fpath', safe=''))" 2>/dev/null || echo "$fpath")
+    dest="$OUT_DIR/$fpath"
+    mkdir -p "$(dirname "$dest")"
+    http_code=$(curl -sS -o "$dest" -w "%{http_code}" "https://${FORK_SLUG}.here.now/.herenow/raw/${encoded}")
+    if [[ "$http_code" -lt 200 || "$http_code" -ge 300 ]]; then
+      echo "  error: failed to download $fpath (HTTP $http_code)" >&2
+      DOWNLOAD_ERRORS=$((DOWNLOAD_ERRORS + 1))
+    else
+      echo "  $fpath" >&2
+    fi
+  done
+
+  if [[ "$DOWNLOAD_ERRORS" -gt 0 ]]; then
+    die "fork incomplete: $DOWNLOAD_ERRORS file(s) failed to download"
+  fi
+
+  # Write fork metadata
+  FORK_META_DIR="$OUT_DIR/.herenow"
+  mkdir -p "$FORK_META_DIR"
+  REQ_VARS=$(echo "$MANIFEST" | "$JQ_BIN" '.requiredVariables // []')
+  echo "$MANIFEST" | "$JQ_BIN" --arg slug "$FORK_SLUG" --argjson vars "$REQ_VARS" \
+    '{forkedFrom: $slug, forkable: true, requiredVariables: $vars}' > "$FORK_META_DIR/fork-meta.json"
+
+  echo "" >&2
+  echo "done. files saved to $OUT_DIR/" >&2
+  echo "edit the files, then publish your version:" >&2
+  echo "  publish.sh $OUT_DIR --forkable --forked-from $FORK_SLUG" >&2
+
+  # Show required variables if any
+  VAR_COUNT=$(echo "$REQ_VARS" | "$JQ_BIN" 'length')
+  if [[ "$VAR_COUNT" -gt 0 ]]; then
+    echo "" >&2
+    echo "this site uses proxy routes that need these variables:" >&2
+    for j in $(seq 0 $((VAR_COUNT - 1))); do
+      vname=$(echo "$REQ_VARS" | "$JQ_BIN" -r ".[$j].name")
+      vupstreams=$(echo "$REQ_VARS" | "$JQ_BIN" -r ".[$j].upstreams | join(\", \")")
+      echo "  $vname -> sent to $vupstreams" >&2
+    done
+  fi
+
+  exit 0
+fi
 
 [[ -n "$TARGET" ]] || usage
 [[ -e "$TARGET" ]] || die "path does not exist: $TARGET"
