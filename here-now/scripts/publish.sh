@@ -17,7 +17,6 @@ TTL=""
 CLIENT=""
 TARGET=""
 FORKABLE=""
-FORKED_FROM=""
 SPA_MODE=""
 
 usage() {
@@ -69,7 +68,6 @@ while [[ $# -gt 0 ]]; do
     --base-url)     BASE_URL="$2"; shift 2 ;;
     --allow-nonherenow-base-url) ALLOW_NON_HERENOW_BASE_URL=1; shift ;;
     --forkable)     FORKABLE="true"; shift ;;
-    --forked-from)  FORKED_FROM="$2"; shift 2 ;;
     --spa)          SPA_MODE="true"; shift ;;
     --help|-h)      usage ;;
     -*)             die "unknown option: $1" ;;
@@ -183,9 +181,6 @@ if [[ -d "$TARGET" ]]; then
     if [[ -z "$FORKABLE" ]]; then
       FORKABLE=$("$JQ_BIN" -r '.forkable // empty' <<< "$FORK_META" 2>/dev/null || true)
     fi
-    if [[ -z "$FORKED_FROM" ]]; then
-      FORKED_FROM=$("$JQ_BIN" -r '.forkedFrom // empty' <<< "$FORK_META" 2>/dev/null || true)
-    fi
   fi
 fi
 
@@ -209,10 +204,6 @@ fi
 
 if [[ "$FORKABLE" == "true" ]]; then
   BODY=$(echo "$BODY" | "$JQ_BIN" '.forkable = true')
-fi
-
-if [[ -n "$FORKED_FROM" ]]; then
-  BODY=$(echo "$BODY" | "$JQ_BIN" --arg ff "$FORKED_FROM" '.forkedFrom = $ff')
 fi
 
 if [[ "$SPA_MODE" == "true" ]]; then
