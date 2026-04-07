@@ -12,7 +12,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.11.0**
+**Skill version: 1.12.0**
 
 Create a live URL from any file or folder. Static hosting with optional proxy routes for calling external APIs server-side.
 
@@ -228,7 +228,7 @@ curl -sS -X PATCH https://here.now/api/v1/publish/{slug}/metadata \
 
 1. Fetch the file manifest: `GET https://{slug}.here.now/.herenow/manifest.json`
 2. Download each file from: `GET https://{slug}.here.now/.herenow/raw/{path}`
-3. Publish the files with `--forkable` to keep the fork chain going
+3. Publish the downloaded files
 
 The manifest returns a JSON object with `files` (array of `{path, size}`), `spaMode`, and `requiredVariables` (variables needed for proxy routes, with upstream domains).
 
