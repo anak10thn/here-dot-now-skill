@@ -12,7 +12,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.12.0**
+**Skill version: 1.12.1**
 
 Create a live URL from any file or folder. Static hosting with optional proxy routes for calling external APIs server-side.
 
