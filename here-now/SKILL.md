@@ -424,16 +424,12 @@ curl -sS https://here.now/api/v1/domains \
   -d '{"domain": "example.com"}'
 ```
 
-The response includes `is_apex`, DNS instructions, and (for apex domains) an `ownership_verification` object with TXT record details.
+The response includes `is_apex` and `dns_instructions` with the records to add. For apex domains, we automatically set up both `example.com` and `www.example.com`.
 
 **DNS setup by domain type:**
 
 - **Subdomains** (e.g. `docs.example.com`): Add a **CNAME** record pointing to `fallback.here.now`.
-- **Apex domains** (e.g. `example.com`):
-  1. Add an **ALIAS** record pointing to `fallback.here.now`. (Your DNS provider may call this ANAME or CNAME flattening.)
-  2. Add a **TXT** record using the `name` and `value` from the `ownership_verification` field in the response.
-
-**Tip:** Not all DNS providers support ALIAS records for apex domains. If yours doesn't, use `www.example.com` with a CNAME instead, then set up a redirect from the apex to `www` at your registrar.
+- **Apex domains** (e.g. `example.com`): Add two **A** records pointing to the IPs provided in `dns_instructions`, plus a **CNAME** for `www` pointing to `fallback.here.now`. Visitors to `www.example.com` are automatically redirected to `example.com`.
 
 SSL is provisioned automatically once DNS is verified.
 
@@ -444,7 +440,7 @@ curl -sS https://here.now/api/v1/domains/example.com \
   -H "Authorization: Bearer {API_KEY}"
 ```
 
-Status is `pending` until DNS is verified and SSL is active, then becomes `active`. For apex domains, the response includes `ownership_verification` with the TXT record details and may include `verification_errors` if there are issues.
+Status is `pending` until DNS is verified and SSL is active, then becomes `active`.
 
 ### List custom domains
 
