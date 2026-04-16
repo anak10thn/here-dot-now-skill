@@ -424,12 +424,12 @@ curl -sS https://here.now/api/v1/domains \
   -d '{"domain": "example.com"}'
 ```
 
-The response includes `is_apex` and `dns_instructions` with the records to add. For apex domains, we automatically set up both `example.com` and `www.example.com`.
+The response includes `is_apex` and `dns_instructions` (each with `type`, `host`, and `value` fields) with the DNS records to add. For apex domains, we automatically set up both `example.com` and `www.example.com`.
 
 **DNS setup by domain type:**
 
-- **Subdomains** (e.g. `docs.example.com`): Add a **CNAME** record pointing to `fallback.here.now`.
-- **Apex domains** (e.g. `example.com`): Add two **A** records pointing to the IPs provided in `dns_instructions`, plus a **CNAME** for `www` pointing to `fallback.here.now`. Visitors to `www.example.com` are automatically redirected to `example.com`.
+- **Subdomains** (e.g. `docs.example.com`): Add a **CNAME** record. The `host` field shows the subdomain part (e.g. `docs`), and the `value` is `fallback.here.now`.
+- **Apex domains** (e.g. `example.com`): Add the records from `dns_instructions` at the DNS provider. The `host` field uses `@` to mean the root domain (some providers use a blank field instead). Typically this is two **A** records with `host: "@"`, plus a **CNAME** with `host: "www"` pointing to `fallback.here.now`. Visitors to `www.example.com` are automatically redirected to `example.com`.
 
 SSL is provisioned automatically once DNS is verified.
 

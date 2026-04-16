@@ -761,9 +761,9 @@ Registers a custom domain for your account. Free plan: 1 domain. Hobby plan: up 
   "status": "pending",
   "is_apex": true,
   "dns_instructions": [
-    { "type": "A", "name": "example.com", "target": "162.159.142.245" },
-    { "type": "A", "name": "example.com", "target": "172.66.2.241" },
-    { "type": "CNAME", "name": "www.example.com", "target": "fallback.here.now" }
+    { "type": "A", "host": "@", "value": "162.159.142.245" },
+    { "type": "A", "host": "@", "value": "172.66.2.241" },
+    { "type": "CNAME", "host": "www", "value": "fallback.here.now" }
   ],
   "www_companion": {
     "domain": "www.example.com",
@@ -779,8 +779,8 @@ For apex domains, we automatically register both `example.com` and `www.example.
 
 **DNS setup by domain type:**
 
-- **Subdomains** (e.g. `docs.example.com`): Add a **CNAME** record pointing to `fallback.here.now`.
-- **Apex domains** (e.g. `example.com`): Add the **A** records and **CNAME** record from `dns_instructions` at your DNS provider.
+- **Subdomains** (e.g. `docs.example.com`): Add a **CNAME** record pointing to `fallback.here.now`. The `host` field in `dns_instructions` will show the subdomain part (e.g. `docs`).
+- **Apex domains** (e.g. `example.com`): Add the **A** records and **CNAME** record from `dns_instructions` at your DNS provider. The `host` field uses `@` to mean the root domain (some providers use a blank field instead).
 
 SSL is provisioned automatically once DNS is verified.
 
@@ -823,7 +823,7 @@ For pending domains, this endpoint also polls Cloudflare for SSL verification st
 
 `GET /api/v1/domains/:domain`
 
-Returns details for a specific custom domain. Triggers on-demand verification for pending domains. Includes `is_apex`, `dns_instructions`, and paired domain info.
+Returns details for a specific custom domain. Triggers on-demand verification for pending domains. Includes `is_apex`, `dns_instructions` (with `type`, `host`, `value` fields), and paired domain info.
 
 **Requires:** `Authorization: Bearer <API_KEY>`
 
