@@ -1,0 +1,19 @@
+{
+  "name": "here-now",
+  "version": "0.1.0",
+  "description": "Publish files and folders to the web instantly. Static hosting with proxy routes for calling LLMs, databases, and other APIs server-side.",
+  "author": { "name": "here.now", "url": "https://here.now" },
+  "homepage": "https://here.now",
+  "repository": "https://github.com/heredotnow/skill",
+  "license": "MIT",
+  "keywords": ["here.now", "herenow", "publish", "static-hosting", "deploy", "share"],
+  "interface": {
+    "displayName": "here.now",
+    "shortDescription": "Publish files and folders to the web instantly.",
+    "longDescription": "Static hosting with proxy routes for calling LLMs, databases, and other APIs server-side. Outputs a live URL at {slug}.here.now.",
+    "developerName": "here.now",
+    "category": "Productivity",
+    "websiteURL": "https://here.now",
+    "logo": "./assets/logo.svg"
+  }
+}

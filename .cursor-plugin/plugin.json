@@ -1,0 +1,11 @@
+{
+  "name": "here.now",
+  "description": "Publish files and folders to the web instantly. Static hosting with proxy routes for calling LLMs, databases, and other APIs server-side. Outputs a live URL at {slug}.here.now.",
+  "version": "0.1.0",
+  "author": { "name": "here.now" },
+  "homepage": "https://here.now",
+  "repository": "https://github.com/heredotnow/skill",
+  "license": "MIT",
+  "keywords": ["here.now", "herenow", "publish", "static-hosting", "deploy", "share"],
+  "logo": "assets/logo.svg"
+}
