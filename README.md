@@ -20,6 +20,20 @@ curl -fsSL https://here.now/install.sh | bash
 
 **Codex** — install from the plugin directory in the Codex app or CLI.
 
+### Install in Hermes
+
+Direct from the public GitHub skill repo:
+
+```bash
+hermes skills install heredotnow/skill/hermes/productivity/here.now
+```
+
+Or via the well-known endpoint on `here.now`:
+
+```bash
+hermes skills install well-known:https://here.now/.well-known/skills/here.now
+```
+
 ## Docs
 
 Full documentation: **https://here.now/docs**
