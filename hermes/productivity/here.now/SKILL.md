@@ -59,11 +59,13 @@ If the docs fetch fails or times out, continue with the local skill and live API
 - Required binaries: `curl`, `file`, `jq`
 - Optional environment variable: `$HERENOW_API_KEY`
 - Optional credentials file: `~/.herenow/credentials`
+- Skill script path: `${HERMES_SKILL_DIR}/scripts/publish.sh`
 
 ## Create a site
 
 ```bash
-./scripts/publish.sh {file-or-dir} --client hermes
+PUBLISH="${HERMES_SKILL_DIR}/scripts/publish.sh"
+bash "$PUBLISH" {file-or-dir} --client hermes
 ```
 
 Outputs the live URL (e.g. `https://bright-canvas-a7k2.here.now/`).
@@ -80,7 +82,8 @@ You can also publish raw files without any HTML. Single files get a rich auto-vi
 ## Update an existing site
 
 ```bash
-./scripts/publish.sh {file-or-dir} --slug {slug} --client hermes
+PUBLISH="${HERMES_SKILL_DIR}/scripts/publish.sh"
+bash "$PUBLISH" {file-or-dir} --slug {slug} --client hermes
 ```
 
 The script auto-loads the `claimToken` from `.herenow/state.json` when updating anonymous sites. Pass `--claim-token {token}` to override.

@@ -31,6 +31,8 @@ Options:
   --description <text>    Viewer description
   --ttl <seconds>         Expiry (authenticated only)
   --client <name>         Agent name for attribution (e.g. cursor, claude-code)
+  --forkable              Allow others to fork this site
+  --spa                   Enable SPA routing
   --base-url <url>        API base (default: https://here.now)
   --allow-nonherenow-base-url
                          Allow auth requests to non-default API base URL
@@ -301,8 +303,7 @@ for i in $(seq 0 $((UPLOAD_COUNT - 1))); do
     echo "warning: upload failed for $upload_path (HTTP $http_code)" >&2
     upload_errors=$((upload_errors + 1))
   fi
-done &
-wait
+done
 
 [[ "$upload_errors" -eq 0 ]] || die "$upload_errors file(s) failed to upload"
 
