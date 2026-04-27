@@ -186,7 +186,7 @@ file_meta() {
   local path="$2"
   local prefix
   prefix=$(urlenc "$path")
-  api_json GET "$BASE_URL/api/v1/drives/$id/files?prefix=$prefix&limit=200" | "$JQ_BIN" --arg p "$path" '.files[]? | select(.path == $p)' | head -n 1
+  api_json GET "$BASE_URL/api/v1/drives/$id/files?prefix=$prefix&limit=200" | "$JQ_BIN" -c --arg p "$path" '.files[]? | select(.path == $p)' | head -n 1
 }
 
 put_file() {
