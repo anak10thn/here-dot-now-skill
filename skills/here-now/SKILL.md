@@ -12,7 +12,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.15.0**
+**Skill version: 1.15.1**
 
 Create a live URL from any file or folder. Static hosting with optional proxy routes for calling external APIs server-side.
 
@@ -93,7 +93,7 @@ Use a Drive when the user wants a private cloud folder that agents can read, wri
 ./scripts/drive.sh share Research --perms write --prefix notes/ --ttl 7d
 ```
 
-If you receive a `herenow_drive` share block, use its `token` as `Authorization: Bearer <token>` against `api_base`, respect `pathPrefix`, and preserve ETags on writes. If the skill is available, prefer `./scripts/drive.sh`; otherwise call the listed API operations directly.
+If you receive a `herenow_drive` share block, use its `token` as `Authorization: Bearer <token>` against `api_base`, respect `pathPrefix` when present, and preserve ETags on writes. A `pathPrefix` of `null` means full-Drive access. If the skill is available, prefer `./scripts/drive.sh`; otherwise call the listed API operations directly.
 
 ## Client attribution
 

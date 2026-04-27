@@ -8,7 +8,7 @@ description: >
   "share this on the web", "make a website", "put this online", "upload to
   the web", "create a webpage", "share a link", "serve this site", "generate
   a URL", or "build a chatbot". Outputs a live, shareable URL at {slug}.here.now.
-version: 1.15.0
+version: 1.15.1
 author: here.now
 license: MIT
 prerequisites:
@@ -102,7 +102,7 @@ bash "$DRIVE" put Research notes/today.md --from ./notes/today.md
 bash "$DRIVE" share Research --perms write --prefix notes/ --ttl 7d
 ```
 
-If you receive a `herenow_drive` share block, use its `token` as `Authorization: Bearer <token>` against `api_base`, respect `pathPrefix`, and preserve ETags on writes. If the skill is available, prefer `drive.sh`; otherwise call the listed API operations directly.
+If you receive a `herenow_drive` share block, use its `token` as `Authorization: Bearer <token>` against `api_base`, respect `pathPrefix` when present, and preserve ETags on writes. A `pathPrefix` of `null` means full-Drive access. If the skill is available, prefer `drive.sh`; otherwise call the listed API operations directly.
 
 ## API key storage
 

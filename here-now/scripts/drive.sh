@@ -28,7 +28,7 @@ Commands:
   import <drive> <prefix> --from <local-folder> [--dry-run]
   export <drive> <prefix> --to <local-folder> [--dry-run]
   rm <drive> <path> [--recursive --confirm <path>]
-  share <drive> --perms read|write [--prefix notes/] [--ttl 30d] [--label text]
+  share <drive> --perms read|write [--prefix notes/] [--ttl 30d] [--label text] [--manage-tokens]
   tokens <drive>
   revoke <drive> <tokenId>
   delete <drive> --confirm "<drive name>"
@@ -358,20 +358,21 @@ case "$CMD" in
     fi
     ;;
   share)
-    [[ $# -ge 1 ]] || die "usage: drive.sh share <drive> --perms read|write [--prefix notes/] [--ttl 30d] [--label text]"
+    [[ $# -ge 1 ]] || die "usage: drive.sh share <drive> --perms read|write [--prefix notes/] [--ttl 30d] [--label text] [--manage-tokens]"
     id=$(resolve_drive "$1"); shift
-    perms="write"; prefix=""; ttl=""; label=""
+    perms="write"; prefix=""; ttl=""; label=""; manage_tokens="false"
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --perms) perms="$2"; shift 2 ;;
         --prefix) prefix="$2"; shift 2 ;;
         --ttl) ttl="$2"; shift 2 ;;
         --label) label="$2"; shift 2 ;;
+        --manage-tokens) manage_tokens="true"; shift ;;
         *) die "unexpected share argument: $1" ;;
       esac
     done
-    body=$("$JQ_BIN" -n --arg p "$perms" --arg pp "$prefix" --arg ttl "$ttl" --arg label "$label" \
-      '{perms:$p} + (if $ttl == "" then {} else {ttl:$ttl} end) + (if $pp == "" then {} else {pathPrefix:$pp} end) + (if $label == "" then {} else {label:$label} end)')
+    body=$("$JQ_BIN" -n --arg p "$perms" --arg pp "$prefix" --arg ttl "$ttl" --arg label "$label" --argjson mt "$manage_tokens" \
+      '{perms:$p} + (if $mt then {manageTokens:true} else {} end) + (if $ttl == "" then {} else {ttl:$ttl} end) + (if $pp == "" then {} else {pathPrefix:$pp} end) + (if $label == "" then {} else {label:$label} end)')
     api_json POST "$BASE_URL/api/v1/drives/$id/tokens" "$body" | "$JQ_BIN" -r '.shareBlock'
     ;;
   tokens)
