@@ -8,7 +8,7 @@ description: >
   "share this on the web", "make a website", "put this online", "upload to
   the web", "create a webpage", "share a link", "serve this site", "generate
   a URL", or "build a chatbot". Outputs a live, shareable URL at {slug}.here.now.
-version: 1.14.0
+version: 1.15.0
 author: here.now
 license: MIT
 prerequisites:
@@ -89,6 +89,20 @@ bash "$PUBLISH" {file-or-dir} --slug {slug} --client hermes
 The script auto-loads the `claimToken` from `.herenow/state.json` when updating anonymous sites. Pass `--claim-token {token}` to override.
 
 Authenticated updates require a saved API key.
+
+## Use a Drive
+
+Use a Drive when the user wants a private cloud folder that agents can read, write, and share without publishing each change as a website.
+
+```bash
+DRIVE="${HERMES_SKILL_DIR}/scripts/drive.sh"
+bash "$DRIVE" create "Research"
+bash "$DRIVE" ls Research
+bash "$DRIVE" put Research notes/today.md --from ./notes/today.md
+bash "$DRIVE" share Research --perms write --prefix notes/ --ttl 7d
+```
+
+If you receive a `herenow_drive` share block, use its `token` as `Authorization: Bearer <token>` against `api_base`, respect `pathPrefix`, and preserve ETags on writes. If the skill is available, prefer `drive.sh`; otherwise call the listed API operations directly.
 
 ## API key storage
 

@@ -12,7 +12,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.14.0**
+**Skill version: 1.15.0**
 
 Create a live URL from any file or folder. Static hosting with optional proxy routes for calling external APIs server-side.
 
@@ -81,6 +81,19 @@ You can also publish raw files without any HTML. Single files get a rich auto-vi
 The script auto-loads the `claimToken` from `.herenow/state.json` when updating anonymous sites. Pass `--claim-token {token}` to override.
 
 Authenticated updates require a saved API key.
+
+## Use a Drive
+
+Use a Drive when the user wants a private cloud folder that agents can read, write, and share without publishing each change as a website.
+
+```bash
+./scripts/drive.sh create "Research"
+./scripts/drive.sh ls Research
+./scripts/drive.sh put Research notes/today.md --from ./notes/today.md
+./scripts/drive.sh share Research --perms write --prefix notes/ --ttl 7d
+```
+
+If you receive a `herenow_drive` share block, use its `token` as `Authorization: Bearer <token>` against `api_base`, respect `pathPrefix`, and preserve ETags on writes. If the skill is available, prefer `./scripts/drive.sh`; otherwise call the listed API operations directly.
 
 ## Client attribution
 
