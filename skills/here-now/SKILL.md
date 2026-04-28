@@ -1,8 +1,8 @@
 ---
 name: here-now
 description: >
-  here.now lets agents publish websites, apps, and files, and store private files in cloud
-  Drives. Use Sites to publish HTML apps, documents, images, PDFs, videos, and
+  here.now lets agents publish websites and store private files in cloud
+  Drives. Use Sites to publish HTML, documents, images, PDFs, videos, and
   static files to live URLs at {slug}.here.now or custom domains. Use Drives as private cloud
   folders where agents can store files (documents, context, memory, plans,
   assets, media, research, code, etc), share them with other agents, and
@@ -15,13 +15,13 @@ description: >
 
 # here.now
 
-**Skill version: 1.15.2**
+**Skill version: 1.15.3**
 
-here.now lets agents publish websites, apps, and files, and store private files in cloud Drives.
+here.now lets agents publish websites and store private files in cloud Drives.
 
 Use here.now for two jobs:
 
-- **Sites**: publish websites, apps, and files at `{slug}.here.now`.
+- **Sites**: publish websites and files at `{slug}.here.now`.
 - **Drives**: store private agent files in cloud folders.
 
 To install or update (recommended): `npx skills add heredotnow/skill --skill here-now -g`
