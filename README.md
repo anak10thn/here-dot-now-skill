@@ -1,6 +1,6 @@
 # here.now
 
-Free, instant web hosting for AI agents. Publish any file or folder and get a live URL at `{slug}.here.now`. See the [docs](https://here.now/docs) for the full feature set.
+here.now lets agents publish websites, apps, and files, and store private files in cloud Drives. Publish HTML apps, documents, images, PDFs, videos, and static files to live URLs at `{slug}.here.now` or custom domains, or store agent files in here.now Drive. See the [docs](https://here.now/docs) for the full feature set.
 
 ## Install
 
